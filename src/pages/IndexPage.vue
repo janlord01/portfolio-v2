@@ -51,7 +51,7 @@
                 style="font-size: 25px; margin-top: 20px"
                 :style="$q.screen.gt.sm ? 'display:block;' : 'display:none'"
               >
-                Full-Stack Web Artisan
+                Software Engineer
               </p>
               <p
                 :style="$q.screen.gt.sm ? 'display:block;' : 'display:none'"
@@ -190,126 +190,99 @@
           </q-avatar>
         </div>
       </div>
-      <div class="col-12 col-sm-8">
-        <div
-          style="overflow: hidden"
-          :class="$q.screen.gt.md ? 'q-pb-md q-pl-sm' : 'q-pa-sm'"
-        >
+      <div class="col col-sm-8">
+        <!-- Projects Section -->
+        <div class="q-pa-sm">
           <p class="text-h6 text-center">Project</p>
-          <q-card
-            :class="$q.screen.gt.md ? 'q-mt-md q-mr-md ' : 'q-mt-md '"
-            bordered
-            rounded
-            v-for="post in posts"
-            :key="post.id"
-            style="float: left; border-radius: 20px"
-            :style="$q.screen.gt.md ? 'width: 48%;' : 'width: 100%'"
+          <div
+            :class="$q.screen.gt.md ? 'row items-start ' : 'column items-start'"
+            class="q-mt-md"
           >
-            <q-item class="full-width">
-              <q-item-section avatar>
-                <q-avatar>
-                  <img :src="post.icon" />
-                </q-avatar>
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label class="text-bold">{{ post.name }}</q-item-label>
-                <q-item-label caption> {{ post.sub_caption }} </q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-separator />
-
-            <q-img :src="post.imageUrl" />
-
-            <q-card-section>
-              <div>{{ post.caption }}</div>
-              <!-- <div class="text-caption text-grey">{{ niceDate(post.date) }}</div> -->
-            </q-card-section>
-            <q-separator />
-            <q-card-section>
-              <div>
+            <q-card
+              v-for="post in posts"
+              :key="post.id"
+              bordered
+              rounded
+              style="border-radius: 20px"
+              class="q-my-sm q-mr-md"
+              :style="$q.screen.gt.md ? 'flex-basis: 48%; ' : 'width: 100%'"
+            >
+              <!-- Card content -->
+              <q-item class="full-width">
+                <q-item-section avatar>
+                  <q-avatar>
+                    <img :src="post.icon" />
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="text-bold">{{ post.name }}</q-item-label>
+                  <q-item-label caption> {{ post.sub_caption }} </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-img :src="post.imageUrl" />
+              <q-card-section>
+                <div>{{ post.caption }}</div>
+              </q-card-section>
+              <q-separator />
+              <q-card-section>
                 <q-chip
                   size="sm"
                   v-for="(item, index) in post.tech"
                   :key="index"
                   >{{ item }}</q-chip
                 >
-              </div>
-            </q-card-section>
-            <q-separator />
-            <q-card-section>
-              <q-btn
-                color="orange-9"
-                label="Live"
-                outline
-                :size="$q.screen.gt.sm ? 'md' : 'sm'"
-                target="_blank"
-                :href="post.url"
-              />
-            </q-card-section>
-          </q-card>
+              </q-card-section>
+              <q-separator />
+              <q-card-section>
+                <q-btn
+                  color="orange-9"
+                  label="Live"
+                  outline
+                  :size="$q.screen.gt.sm ? 'md' : 'sm'"
+                  target="_blank"
+                  :href="post.url"
+                />
+              </q-card-section>
+            </q-card>
+          </div>
         </div>
         <q-separator class="q-mt-lg" />
-        <div
-          style="overflow: hidden"
-          :class="$q.screen.gt.md ? 'q-pb-md q-pl-sm' : 'q-pa-sm'"
-        >
+
+        <!-- Experience Section -->
+        <div class="q-pa-sm">
           <p class="text-h6 text-center q-mt-md">Experience</p>
-          <q-card
-            :class="$q.screen.gt.md ? 'q-mt-md q-mr-md ' : 'q-mt-md '"
-            bordered
-            rounded
-            v-for="post in experiences"
-            :key="post.id"
-            style="float: left; border-radius: 20px"
-            :style="$q.screen.gt.md ? 'width: 48%;' : 'width: 100%'"
+          <div
+            :class="$q.screen.gt.md ? 'row items-start ' : 'column items-start'"
+            class="q-mt-md"
           >
-            <q-item class="full-width">
-              <q-item-section avatar>
-                <q-avatar>
-                  <img :src="post.icon" />
-                </q-avatar>
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label class="text-bold">{{ post.name }}</q-item-label>
-                <q-item-label caption> {{ post.sub_caption }} </q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-separator />
-
-            <q-img :src="post.imageUrl" />
-
-            <q-card-section>
-              <div>{{ post.caption }}</div>
-              <!-- <div class="text-caption text-grey">{{ niceDate(post.date) }}</div> -->
-            </q-card-section>
-            <!-- <q-separator />
-            <q-card-section>
-              <div>
-                <q-chip
-                  size="sm"
-                  v-for="(item, index) in post.tech"
-                  :key="index"
-                  >{{ item }}</q-chip
-                >
-              </div>
-            </q-card-section> -->
-          </q-card>
-
-          <div style="clear: both"></div>
-          <div style="clear: both" class="q-mt-lg">
-            <p class="text-caption q-pl-sm">
-              Copyright &copy; 2024. Built with Quasar and Vue Js. Download my
-              CV here ->
-              <a
-                target="_blank"
-                href="https://drive.google.com/file/d/1eoQbFYYXpGboCbSG6KGhzdpWAes5JMv4/view?usp=drive_link"
-                >CV 2024</a
-              >
-            </p>
+            <q-card
+              v-for="post in experiences"
+              :key="post.id"
+              bordered
+              rounded
+              style="border-radius: 20px"
+              class="q-my-sm q-mr-md"
+              :style="$q.screen.gt.md ? 'flex-basis: 48%' : 'width: 100%'"
+            >
+              <!-- Card content -->
+              <q-item class="full-width">
+                <q-item-section avatar>
+                  <q-avatar>
+                    <img :src="post.icon" />
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="text-bold">{{ post.name }}</q-item-label>
+                  <q-item-label caption> {{ post.sub_caption }} </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-img :src="post.imageUrl" />
+              <q-card-section>
+                <div>{{ post.caption }}</div>
+              </q-card-section>
+            </q-card>
           </div>
         </div>
       </div>
@@ -331,11 +304,24 @@ defineOptions({
 
 const posts = reactive([
   {
+    icon: "/images/2913133.png",
+    name: "wp-login-logout-menu plugin",
+    url: "https://github.com/janlord01/wp-login-logout-menu",
+    id: 1,
+    caption:
+      "WP Login Logout Menu is a WordPress plugin that adds a login/logout menu item to your navigation menu. The menu item dynamically changes based on the user's login status. When the user is logged in, it shows a Logout link; when the user is logged out, it shows a Login link.",
+    date: 1713794484736,
+    sub_caption: "WP Login Logout Menu is a WordPress plugin",
+    imageUrl: "/images/wp-login-logout-desktop.png",
+    tech: ["Wordpress", "Plugin", "PHP", "Javascript", "HTML", "CSS"],
+  },
+  {
     icon: "/images/janlord.png",
     name: "janlordluga.com",
     url: "https://janlordluga.com/",
     id: 1,
-    caption: "My Portfolio site  version 2 built with Quasar and Vue Js",
+    caption:
+      "My portfolio site, version 2, is a dynamic and responsive web application built with Quasar Framework and Vue.js. It showcases my expertise in modern web development, featuring sleek design elements and optimized performance across all devices.",
     date: 1713794484736,
     sub_caption: "Portfolio Website v2 - Using Quasar/Vue Js",
     imageUrl: "/images/janlord-v2-desktop.png",
@@ -346,7 +332,8 @@ const posts = reactive([
     name: "v1.janlordluga.com",
     url: "https://portfolio-v1-five-jet.vercel.app/",
     id: 1,
-    caption: "My Portfolio site version 1 built with NextJs with Tailwind CSS.",
+    caption:
+      "My portfolio site, version 1, was crafted using Next.js and styled with Tailwind CSS. This version highlights my skills in building fast, scalable web applications with a focus on clean, modern design and efficient development practices.",
     date: 1713794484736,
     sub_caption: "Portfolio Website v1 - Using NextJs 13",
     imageUrl: "/images/janlord-v1-desktop.png",
@@ -492,7 +479,7 @@ const experiences = reactive([
     caption:
       "In 2018, I stopped working as a programmer and started my own business called Groom & Brew MFG. My business focuses on creating men’s grooming like hair/beard growers, hair pomades, beard shampoo, beard oil, tattoo aftercare, perfumes and many other more. I’m also building an e-commerce website to sell my products aside from the well-known platforms like Facebook, shopee and Lazada.",
     sub_caption:
-      "2018-2023 - Brewer/Formulator/Social Media Marketing/Web Developer ",
+      "2018-2024 - Brewer/Formulator/Social Media Marketing/Web Developer ",
     imageUrl: "/images/groom-and-brew.png",
     tech: [
       "Quasar",
