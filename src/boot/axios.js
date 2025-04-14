@@ -1,24 +1,61 @@
-import { boot } from 'quasar/wrappers'
-import axios from 'axios'
+import { boot } from "quasar/wrappers";
+import { LocalStorage } from "quasar";
+import axios from "axios";
 
-// Be careful when using SSR for cross-request state pollution
-// due to creating a Singleton instance here;
-// If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
-// "export default () => {}" function below (which runs individually
-// for each client)
-const api = axios.create({ baseURL: 'https://api.example.com' })
+// Base URL configuration
+// Local
+// const api = axios.create({
+//   baseURL: process.env.API_BASE_URL || "http://127.0.0.1:8002", // Use environment variable or fallback to local
+// });
+
+// Live
+// const api = axios.create({
+//   baseURL: process.env.API_BASE_URL || "https://janlordluga.com/v1", // Use environment variable or fallback to local
+// });
+
+// Live
+const api = axios.create({
+  baseURL: process.env.API_BASE_URL || "https://janlordluga.com/v1", // Use environment variable or fallback to local
+});
+
+// Frontend URL
+const appUrl = "https://janlordluga.com";
+// const appUrl = "https://jluga.com/";
 
 export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
+  // Set up Axios for Vue (Options API)
+  app.config.globalProperties.$axios = axios;
+  app.config.globalProperties.$api = api;
 
-  app.config.globalProperties.$axios = axios
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
+  // Fetch JWT token from LocalStorage
+  const token = LocalStorage.getItem("jwt");
+  if (token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
 
-  app.config.globalProperties.$api = api
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
-})
+  // Set common headers
+  api.defaults.headers.common["Accept"] = "application/vnd.api+json";
+  api.defaults.headers.common["Content-Type"] = "application/vnd.api+json";
+  api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-export { api }
+  // Optional: Set CSRF token if available
+  const csrfToken = document.head.querySelector('meta[name="csrf-token"]');
+  if (csrfToken) {
+    api.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken.content;
+  }
+
+  // Response interceptor for error handling
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        // Handle unauthorized access, e.g., redirect to login
+        LocalStorage.remove("jwt");
+        window.location.href = "/login";
+      }
+      return Promise.reject(error);
+    }
+  );
+});
+
+export { api, appUrl };

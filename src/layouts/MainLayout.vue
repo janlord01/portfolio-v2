@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="background: #e5e5e5" class="q-pt-lg">
+  <q-layout view="lHh Lpr lFf" style="background: #fff" class="q-pt-lg">
     <!-- <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -44,8 +44,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
+import { useSettingsStore } from "src/stores/settings/settingStore";
+
+
+const settingStore = useSettingsStore();
 
 defineOptions({
   name: "MainLayout",
@@ -101,4 +105,10 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+onMounted(() => {
+  setTimeout(() => {
+    settingStore.getSetting();
+    settingStore.changeThemeColor();
+  }, 500)
+})
 </script>
