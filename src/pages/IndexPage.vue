@@ -11,8 +11,10 @@
                 <q-skeleton type="QAvatar" :size="$q.screen.gt.sm ? '100px' : '120px'" />
               </template>
               <q-avatar :size="$q.screen.gt.sm ? '100px' : '100px'" v-else>
-                <img
-                  :src="userStore.userData.profile_image ? userStore.userData.profile_image : '/images/janlord.png'" />
+                <!-- <img
+                  :src="userStore.userData.profile_image ? userStore.userData.profile_image : '/images/janlord.png'" /> -->
+
+                <img :src="'/images/janlord02.png'" />
               </q-avatar>
             </q-item-section>
             <q-item-section>
@@ -227,7 +229,7 @@
 
         <div class="col col-sm-8">
           <q-tabs v-model="tab" align="justify" narrow-indicator>
-            <q-tab v-for="type in projectTypes" :key="type" :name="type" :label="`Project - ${type}`" />
+            <q-tab v-for="type in projectTypes" :key="type" :name="type" :label="`${type}s`" />
             <q-tab name="experiences" label="Experiences" />
           </q-tabs>
 

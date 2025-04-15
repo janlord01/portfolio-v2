@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="background: #e5e5e5" class="q-pt-lg">
+  <q-layout view="lHh Lpr lFf" style="background: #fff" class="q-pt-lg">
     <!-- <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -40,6 +40,22 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <div class="fixed-bottom-right q-ma-sm">
+      <q-btn color="primary" label="Portfolio Versions" no-caps>
+        <q-menu>
+          <q-list style="min-width: 100px">
+            <q-separator />
+            <q-item clickable v-close-popup>
+              <q-item-section>Portfolio v1</q-item-section>
+            </q-item>
+            <q-separator />
+            <q-item clickable v-close-popup :to="'https://janlordluga.com/v2'">
+              <q-item-section>Portfolio v2</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
+    </div>
   </q-layout>
 </template>
 
@@ -105,10 +121,10 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
-onMounted(()=>{
-    setTimeout(() =>{
-      settingStore.getSetting();
-      settingStore.changeThemeColor();
-    },500)
+onMounted(() => {
+  setTimeout(() => {
+    settingStore.getSetting();
+    settingStore.changeThemeColor();
+  }, 500)
 })
 </script>
