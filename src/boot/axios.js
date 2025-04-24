@@ -8,22 +8,19 @@ import axios from "axios";
 //   baseURL: process.env.API_BASE_URL || "http://127.0.0.1:8002", // Use environment variable or fallback to local
 // });
 
+// Live
+// const api = axios.create({
+//   baseURL: process.env.API_BASE_URL || "https://janlordluga.com/v1", // Use environment variable or fallback to local
+// });
 
 // Live
 const api = axios.create({
   baseURL: process.env.API_BASE_URL || "https://janlordluga.com/v1", // Use environment variable or fallback to local
 });
 
-// Live
-// const api = axios.create({
-//   baseURL: process.env.API_BASE_URL || "https://janlordluga.com/v1", // Use environment variable or fallback to local
-// });
-
 // Frontend URL
 const appUrl = "https://janlordluga.com";
 // const appUrl = "https://jluga.com/";
-
-
 
 export default boot(({ app }) => {
   // Set up Axios for Vue (Options API)
@@ -49,8 +46,8 @@ export default boot(({ app }) => {
 
   // Response interceptor for error handling
   api.interceptors.response.use(
-    response => response,
-    error => {
+    (response) => response,
+    (error) => {
       if (error.response && error.response.status === 401) {
         // Handle unauthorized access, e.g., redirect to login
         LocalStorage.remove("jwt");

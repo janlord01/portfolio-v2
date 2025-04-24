@@ -1,31 +1,31 @@
-import AddProjectPage from 'src/pages/AddProjectPage.vue'
-import EditProjectPage from 'src/pages/EditProjectPage.vue'
-import ProjectListPage from 'src/pages/ProjectPage.vue';;
-import ExperiencePage from 'src/pages/ExperiencePage.vue'
-import AddExperiencePage from 'src/pages/AddExperiencePage.vue';
-import EditExperiencePage from 'src/pages/EditExperiencePage.vue';
-import LoginPage from 'src/pages/LoginPage.vue';
-import ProfilePage from 'src/pages/ProfilePage.vue';
-import SettingPage from 'src/pages/SettingPage.vue';
-import TechStackPage from 'src/pages/TechStackPage.vue';
-import AddTechStack from 'src/pages/AddTechStack.vue';
+import AddProjectPage from "src/pages/AddProjectPage.vue";
+import EditProjectPage from "src/pages/EditProjectPage.vue";
+import ProjectListPage from "src/pages/ProjectPage.vue";
+import ExperiencePage from "src/pages/ExperiencePage.vue";
+import AddExperiencePage from "src/pages/AddExperiencePage.vue";
+import EditExperiencePage from "src/pages/EditExperiencePage.vue";
+import LoginPage from "src/pages/LoginPage.vue";
+import ProfilePage from "src/pages/ProfilePage.vue";
+import SettingPage from "src/pages/SettingPage.vue";
+import TechStackPage from "src/pages/TechStackPage.vue";
+import AddTechStack from "src/pages/AddTechStack.vue";
 
 const routes = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: '/', component: () => import('pages/IndexPage.vue') },
+      { path: "/", component: () => import("pages/HomePage.vue") },
       {
-        path: '/login',
+        path: "/login",
         component: LoginPage,
-        name: 'login'
+        name: "login",
       },
     ],
   },
   {
-    path: '/',
-    component: () => import('layouts/AuthLayout.vue'),
+    path: "/",
+    component: () => import("layouts/AuthLayout.vue"),
     children: [
       /**
        *
@@ -33,19 +33,19 @@ const routes = [
        *
        */
       {
-        path: '/projects',
+        path: "/projects",
         component: ProjectListPage,
-        name: 'ProjectPage'
+        name: "ProjectPage",
       },
       {
-        path: '/add-project',
+        path: "/add-project",
         component: AddProjectPage,
-        name: 'AddProjectPage'
+        name: "AddProjectPage",
       },
       {
-        path: '/project/:id/edit',
+        path: "/project/:id/edit",
         component: EditProjectPage,
-        name: 'EditProjectPage'
+        name: "EditProjectPage",
       },
       /**
        *
@@ -53,19 +53,19 @@ const routes = [
        *
        */
       {
-        path: '/experiences',
+        path: "/experiences",
         component: ExperiencePage,
-        name: 'ExperiencePage'
+        name: "ExperiencePage",
       },
       {
-        path: '/add-experience',
+        path: "/add-experience",
         component: AddExperiencePage,
-        name: 'AddExperiencePage'
+        name: "AddExperiencePage",
       },
       {
-        path: '/experience/:id/edit',
+        path: "/experience/:id/edit",
         component: EditExperiencePage,
-        name: 'EditExperiencePage'
+        name: "EditExperiencePage",
       },
       /**
        *
@@ -73,41 +73,40 @@ const routes = [
        *
        */
       {
-        path: '/tech-stack',
+        path: "/tech-stack",
         component: TechStackPage,
-        name: 'TechStackPage'
+        name: "TechStackPage",
       },
 
       {
-        path: '/add-tech-stack',
+        path: "/add-tech-stack",
         component: AddTechStack,
-        name: 'AddTechStack'
+        name: "AddTechStack",
       },
 
       {
-        path: '/profile',
+        path: "/profile",
         component: ProfilePage,
-        name: 'profile'
+        name: "profile",
       },
       {
-        path: '/settings',
+        path: "/settings",
         component: SettingPage,
-        name: 'settings'
+        name: "settings",
       },
-
     ],
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
-    name: 'page404'
-  }
-]
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
+    name: "page404",
+  },
+];
 
-export default routes
+export default routes;

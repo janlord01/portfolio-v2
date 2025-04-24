@@ -26,9 +26,9 @@ module.exports = configure(function (/* ctx */) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      'mdi-v7',
+      "mdi-v7",
       // 'fontawesome-v6',
-      'eva-icons',
+      "eva-icons",
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
@@ -100,7 +100,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify','Loading','Dialog','LocalStorage'],
+      plugins: ["Notify", "Loading", "Dialog", "LocalStorage", "AppFullscreen"],
     },
 
     // animations: 'all', // --- includes all animations
