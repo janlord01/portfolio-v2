@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="background: #e5e5e5" class="q-pt-lg">
+  <q-layout view="lHh Lpr lFf" style="background: #fff" class="q-pt-lg">
     <!-- <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -105,10 +105,10 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
-onMounted(()=>{
-    setTimeout(() =>{
-      settingStore.getSetting();
-      settingStore.changeThemeColor();
-    },500)
+onMounted(() => {
+  setTimeout(() => {
+    settingStore.getSetting();
+    settingStore.changeThemeColor();
+  }, 500)
 })
 </script>
