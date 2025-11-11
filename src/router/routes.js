@@ -9,6 +9,7 @@ import ProfilePage from "src/pages/ProfilePage.vue";
 import SettingPage from "src/pages/SettingPage.vue";
 import TechStackPage from "src/pages/TechStackPage.vue";
 import AddTechStack from "src/pages/AddTechStack.vue";
+import EditTechStack from "src/pages/EditTechStack.vue";
 
 const routes = [
   {
@@ -82,6 +83,11 @@ const routes = [
         path: "/add-tech-stack",
         component: AddTechStack,
         name: "AddTechStack",
+      },
+      {
+        path: "/tech/:id/edit",
+        component: EditTechStack,
+        name: "EditTechStack",
       },
 
       {

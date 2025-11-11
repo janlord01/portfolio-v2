@@ -48,7 +48,14 @@
             <q-btn color="primary" label="edit" icon="mdi-square-edit-outline" class="q-mr-sm"
               :size="$q.screen.gt.sm ? 'sm' : 'sm'" :to="`/project/${element.id}/edit`" />
             <q-btn color="negative" label="delete" icon="mdi-trash-can-outline" @click="deleteFunc(element.id)"
-              :size="$q.screen.gt.sm ? 'sm' : 'sm'" />
+              :size="$q.screen.gt.sm ? 'sm' : 'sm'" class="q-mr-sm" />
+            <q-toggle
+              :model-value="element.is_active == 1 || element.is_active === true"
+              @update:model-value="toggleActive(element.id, $event)"
+              :label="(element.is_active == 1 || element.is_active === true) ? 'Active' : 'Inactive'"
+              :color="(element.is_active == 1 || element.is_active === true) ? 'positive' : 'grey'"
+              :size="$q.screen.gt.sm ? 'sm' : 'sm'"
+            />
           </q-card-section>
         </q-card>
       </draggable>
@@ -66,6 +73,8 @@ export default {
     draggable: VueDraggableNext,
   },
   setup() {
+    const $q = useQuasar();
+
     const deleteFunc = async (id) => {
       $q.dialog({
         title: 'Delete',
@@ -350,7 +359,48 @@ export default {
     const log = (event) => {
       console.log(event);
     };
-    const $q = useQuasar();
+
+    const toggleActive = async (id, isActive) => {
+      $q.loading.show();
+      await api.post(`/api/projects/${id}/toggle-active`, { is_active: isActive })
+        .then(response => {
+          if (response.data.status == 200) {
+            setTimeout(() => {
+              $q.notify({
+                position: 'top',
+                type: 'positive',
+                timeout: 3000,
+                message: response.data.message || (isActive ? 'Project activated' : 'Project deactivated')
+              });
+              getAllProject();
+              $q.loading.hide();
+            }, 300);
+          } else {
+            setTimeout(() => {
+              $q.notify({
+                position: 'top',
+                type: 'negative',
+                timeout: 3000,
+                message: response.data.message || 'Failed to update project status'
+              });
+              getAllProject(); // Reload to revert UI state
+              $q.loading.hide();
+            }, 3000);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          $q.notify({
+            position: 'top',
+            type: 'negative',
+            timeout: 3000,
+            message: 'Something went wrong, Please contact your IT support!'
+          });
+          getAllProject(); // Reload to revert UI state
+          $q.loading.hide();
+        });
+    };
+
     const getAllProject = async () => {
       $q.loading.show();
       api.get('/api/projects')
@@ -370,9 +420,9 @@ export default {
       projects,
       log,
       onDragEnd,
-      $q,
       getAllProject,
-      deleteFunc
+      deleteFunc,
+      toggleActive
     };
   },
   data() {

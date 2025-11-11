@@ -48,14 +48,37 @@
                       target="_blank" />
                   </div>
                 </div>
-                <div v-else class="text-grey">Click a card to preview</div>
+                <div v-else class="text-black about-placeholder q-pa-sm">
+                  <p class="text-h6 text-weight-bold q-mb-xs">
+                    Hi, I’m Janlord Luga — a software engineer specializing in the Vue.js (Quasar Framework), Laravel,
+                    and WordPress with 14+ years of experience.
+                  </p>
+                  <p class="text-body1 q-mb-xs ">
+                    For the past 14 years, I’ve delivered software for companies and institutions worldwide, including
+                    point-of-sale platforms, hotel booking tools, school management systems for 15,000+ students, RFID
+                    attendance apps, barbershop and tattoo shop systems, community forums, e-canteens, e-libraries, and
+                    more.
+                  </p>
+                  <p class="text-body1 q-mb-xs">
+                    I also craft WordPress experiences—from SEO-driven affiliate sites to full e-commerce
+                    builds—ensuring
+                    seamless UX and scalable performance.
+                  </p>
+                  <p class="text-body1">
+                    I specialize in WordPress, Laravel, and Vue.js (Quasar), combining clean design with smart
+                    functionality.
+                    I take full ownership, communicate clearly, and stay focused on outcomes. Let’s build something
+                    impactful
+                    together.
+                  </p>
+                </div>
               </div>
 
               <div class="col" style="border-right: 1px solid #000; border-bottom: 1px solid #000; padding: 16px">
                 <!-- Row 2 - Column 2 -->
                 <div class="col col-sm-8 q-pt-md">
                   <q-tabs v-model="tab" align="left" narrow-indicator dense>
-                    <!-- <q-tab name="about" label="About" /> -->
+                    <q-tab name="about" label="About" v-if="!$q.screen.gt.sm" />
                     <q-tab v-for="type in projectTypes" :key="type" :name="type" :label="`${type}`" />
                     <q-tab name="experiences" label="Experiences" />
                   </q-tabs>
@@ -110,14 +133,30 @@
                           <q-card :style="$q.screen.gt.md ? 'flex-basis: 50%' : 'width: 100%'">
                             <q-item>
                               <q-item-section>
-                                <q-item-label>I am a proficient web developer with expertise in WordPress development,
-                                  Vue.js, and Laravel.
-                                  With a strong background in both frontend and backend development, I deliver
-                                  comprehensive web solutions tailored to client needs.
-                                  Additionally, I have experience as a migration specialist, ensuring seamless website
-                                  transfers between hosting providers.
-                                  My technical skills and attention to detail enable me to create robust and dynamic web
-                                  applications. </q-item-label>
+                                <p class="text-h6 text-weight-bold q-mb-xs">
+                                  Hi, I’m Janlord Luga — a software engineer specializing in the Vue.js (Quasar
+                                  Framework), Laravel, and WordPress with 14+ years of experience.
+                                </p>
+                                <p class="text-body1 q-mb-xs ">
+                                  For the past 14 years, I’ve delivered software for companies and institutions
+                                  worldwide, including
+                                  point-of-sale platforms, hotel booking tools, school management systems for 15,000+
+                                  students, RFID
+                                  attendance apps, barbershop and tattoo shop systems, community forums, e-canteens,
+                                  e-libraries, and more.
+                                </p>
+                                <p class="text-body1 q-mb-xs">
+                                  I also craft WordPress experiences—from SEO-driven affiliate sites to full e-commerce
+                                  builds—ensuring
+                                  seamless UX and scalable performance.
+                                </p>
+                                <p class="text-body1">
+                                  I specialize in WordPress, Laravel, and Vue.js (Quasar), combining clean design with
+                                  smart functionality.
+                                  I take full ownership, communicate clearly, and stay focused on outcomes. Let’s build
+                                  something impactful
+                                  together.
+                                </p>
                               </q-item-section>
                             </q-item>
                           </q-card>
@@ -259,6 +298,11 @@ const isMinimized = ref(false)
 const isClosed = ref(false)
 
 onMounted(() => {
+  if($q.screen.gt.sm){
+    tab.value = 'website'
+  } else {
+    tab.value = 'about'
+  }
   settingStore.getSetting();
   userStore.getUserData();
   getAllData();
@@ -338,9 +382,9 @@ onMounted(() => {
   top: 0px;
 }
 
-.tech-stack {
+/* .tech-stack {
   filter: grayscale(1);
-}
+} */
 
 .mobile-profile-img {
   width: 100%;
@@ -371,5 +415,9 @@ onMounted(() => {
 .full-body-table {
   width: 100%;
   max-width: 100%;
+}
+
+.about-placeholder {
+  line-height: 1.5;
 }
 </style>
