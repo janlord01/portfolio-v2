@@ -227,9 +227,9 @@ onMounted(() => {
   top: 0px;
 }
 
-.tech-stack {
+/* .tech-stack {
   filter: grayscale(1);
-}
+} */
 
 .mobile-profile-img {
   width: 100%;
