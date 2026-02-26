@@ -20,6 +20,13 @@
         <q-card-section>
           <q-input filled v-model="userStore.userData.name" label="Name" required />
           <q-input filled v-model="userStore.userData.email" label="Email" class="q-mt-md" type="email"  />
+          <q-input filled v-model="userStore.userData.title" label="Title" class="q-mt-md" hint="e.g., Software Engineer specializing in Vue.js, Laravel, and WordPress" />
+          <q-editor
+            v-model="userStore.userData.about"
+            class="q-mt-md"
+            min-height="10rem"
+            placeholder="Enter your about me content here..."
+          />
           <q-input filled v-model="userStore.userData.address" label="Address" type="textarea" class="q-mt-md q-mb-md" required />
           <q-input filled v-model="userStore.userData.cv" label="CV Link" class="q-mt-md q-mb-md" />
           <q-btn type="submit" label="Update" color="primary" :loading="loadingBtn" />
@@ -66,6 +73,8 @@ const submitForm = async () => {
   const formData = new FormData();
   formData.append('name', userStore.userData.name);
   formData.append('email', userStore.userData.email);
+  formData.append('title', userStore.userData.title || '');
+  formData.append('about', userStore.userData.about || '');
   formData.append('address', userStore.userData.address);
   formData.append('cv', userStore.userData.cv);
 

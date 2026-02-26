@@ -57,6 +57,7 @@
           <q-btn  to="/projects" class="text-white" label="Projects" no-caps dense flat />
           <q-btn  to="/experiences" class="text-white" label="Experiences" no-caps dense flat />
           <q-btn  to="/tech-stack" class="text-white" :label="settingStore.settingsData.tech_title ? settingStore.settingsData.tech_title : 'Tech Stack'" no-caps dense flat />
+          <q-btn  to="/reviews" class="text-white" label="Reviews" no-caps dense flat />
           <!-- <a href="javascript:void(0)" class="text-white">
             Experiences
           </a> -->
@@ -88,6 +89,9 @@
 
                 <q-item clickable to="/add-tech-stack" class="GL__menu-link">
                   <q-item-section>New {{ settingStore.settingsData.tech_title ? settingStore.settingsData.tech_title.toLowerCase() : settingStore.settingsData.tech_title || 'tech stack' }} </q-item-section>
+                </q-item>
+                <q-item clickable to="/reviews" class="GL__menu-link">
+                  <q-item-section>New review</q-item-section>
                 </q-item>
                 <!-- <q-item clickable class="GL__menu-link">
                   <q-item-section>New gist</q-item-section>
@@ -130,6 +134,9 @@
                 </q-item>
                 <q-item active-class="text-primary" clickable to="/tech-stack" class="GL__menu-link">
                   <q-item-section>Your {{ settingStore.settingsData.tech_title ? settingStore.settingsData.tech_title.toLowerCase() : settingStore.settingsData.tech_title || 'tech stack' }}</q-item-section>
+                </q-item>
+                <q-item active-class="text-primary" clickable to="/reviews" class="GL__menu-link">
+                  <q-item-section>Your reviews</q-item-section>
                 </q-item>
 
                 <q-item active-class="text-primary" clickable to="/settings" class="GL__menu-link">
