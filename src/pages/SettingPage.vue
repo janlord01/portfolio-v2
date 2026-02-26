@@ -11,6 +11,15 @@
           <q-input filled v-model="settingStore.settingsData.caption" label="Caption" class="q-mt-md" />
 
           <q-input filled v-model="settingStore.settingsData.tech_title" label="Tech Title" class="q-mt-md q-mb-md" required />
+          <q-input
+            filled
+            v-model.number="settingStore.settingsData.minimum_reviews_to_display"
+            label="Minimum reviews to display"
+            type="number"
+            min="0"
+            hint="0 = show Reviews tab when at least 1 approved; e.g. 3 = show when 3+ approved"
+            class="q-mt-md"
+          />
           <label>Theme Color</label>
           <q-color
             v-model="themeColor"
@@ -65,6 +74,9 @@ const submitForm = async () => {
   formData.append('position', settingStore.settingsData.position);
   formData.append('tech_title', settingStore.settingsData.tech_title);
   formData.append('theme_color', settingStore.settingsData.theme_color);
+  if (settingStore.settingsData.minimum_reviews_to_display !== undefined && settingStore.settingsData.minimum_reviews_to_display !== null) {
+    formData.append('minimum_reviews_to_display', settingStore.settingsData.minimum_reviews_to_display);
+  }
 
   await api.post('/api/settings', formData)
     .then(response => {
