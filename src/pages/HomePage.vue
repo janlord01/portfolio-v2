@@ -399,11 +399,11 @@
                     >
                       <div class="q-pa-sm reviews-tab-content">
                         <template v-if="showReviewsTab && reviews.length > 0">
-                          <div class="row reviews-row q-mt-md">
+                          <div class="reviews-row q-mt-md">
                             <div
                               v-for="review in reviews"
                               :key="review.id"
-                              class="col-12 col-md-6 review-card-col"
+                              class="review-card-col"
                             >
                               <q-card bordered class="q-pa-md review-card">
                                 <q-item class="q-pa-none">
@@ -1103,19 +1103,24 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
+/* Float-left style: 2 columns on desktop, cards flow top-to-bottom per column, same margin-bottom */
 .reviews-row {
-  margin: -8px;
+  column-count: 2;
+  column-gap: 16px;
+  margin-bottom: 0;
 }
 
 .review-card-col {
-  padding: 8px;
+  break-inside: avoid;
+  margin-bottom: 16px;
+  width: 100%;
 }
 
 .review-card {
-  margin-bottom: 16px;
+  width: 100%;
 }
 
-/* Prevent overflow: allow flex children to shrink and text to wrap */
+/* Prevent overflow: allow text to wrap */
 .review-card-content,
 .review-name,
 .review-title,
@@ -1125,7 +1130,7 @@ onUnmounted(() => {
   word-break: break-word;
 }
 
-.review-message {
+.review-card .review-message {
   max-width: 100%;
 }
 
@@ -1247,28 +1252,20 @@ onUnmounted(() => {
   }
 
   .reviews-row {
-    margin-left: 0;
-    margin-right: 0;
+    column-count: 1;
     min-width: 0;
     max-width: 100%;
-    row-gap: 0;
   }
 
   .review-card-col {
-    padding: 10px 6px;
     min-width: 0;
     max-width: 100%;
   }
 
   .review-card {
-    margin-bottom: 20px;
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
-  }
-
-  .review-card-col:last-child .review-card {
-    margin-bottom: 0;
   }
 
   .review-card :deep(.q-item__section) {
@@ -1313,13 +1310,10 @@ onUnmounted(() => {
   }
 
   .reviews-row {
-    margin-left: 0;
-    margin-right: 0;
     width: 100%;
   }
 
   .review-card-col {
-    padding: 8px 4px;
     width: 100%;
     max-width: 100%;
   }
@@ -1327,7 +1321,6 @@ onUnmounted(() => {
   .review-card {
     width: 100%;
     max-width: 100%;
-    margin-bottom: 16px;
     padding: 12px !important;
   }
 
