@@ -1,5 +1,5 @@
 <template>
-  <q-page class="constrain q-pa-md">
+  <q-page class="constrain home-page q-pa-md">
     <HeaderPart />
     <template v-if="!isClosed">
       <template v-if="!isMinimized">
@@ -157,7 +157,7 @@
               </div>
 
               <div
-                class="col"
+                class="col home-content-col"
                 style="
                   border-right: 1px solid #000;
                   border-bottom: 1px solid #000;
@@ -165,29 +165,46 @@
                 "
               >
                 <!-- Row 2 - Column 2 -->
-                <div class="col col-sm-8 q-pt-md">
-                  <q-tabs v-model="tab" align="left" narrow-indicator dense>
-                    <q-tab name="about" label="About" v-if="!$q.screen.gt.sm" />
-                    <q-tab
-                      v-for="type in projectTypes"
-                      :key="type"
-                      :name="type"
-                      :label="`${type}`"
-                    />
-                    <q-tab name="experiences" label="Experiences" />
-                    <q-tab
-                      v-if="showReviewsTab"
-                      name="reviews"
-                      label="Reviews"
-                    />
-                  </q-tabs>
+                <div class="col col-sm-8 q-pt-md home-tabs-section">
+                  <div class="home-tabs-wrapper">
+                    <q-tabs
+                      v-model="tab"
+                      align="left"
+                      narrow-indicator
+                      dense
+                      class="home-tabs"
+                      active-color="primary"
+                      indicator-color="primary"
+                    >
+                      <q-tab
+                        name="about"
+                        :label="tabLabel('about', 'About')"
+                        v-if="!$q.screen.gt.sm"
+                      />
+                      <q-tab
+                        v-for="type in projectTypes"
+                        :key="type"
+                        :name="type"
+                        :label="tabLabel(type, type)"
+                      />
+                      <q-tab
+                        name="experiences"
+                        :label="tabLabel('experiences', 'Experiences')"
+                      />
+                      <q-tab
+                        v-if="showReviewsTab"
+                        name="reviews"
+                        :label="tabLabel('reviews', 'Reviews')"
+                      />
+                    </q-tabs>
+                  </div>
 
                   <q-tab-panels
                     v-model="tab"
                     animated
                     transition-prev="fade"
                     transition-next="fade"
-                    class="bg-transparent text-black"
+                    class="bg-transparent text-black home-tab-panels"
                   >
                     <q-tab-panel
                       v-for="type in projectTypes"
@@ -375,8 +392,12 @@
                     </q-tab-panel>
 
                     <!-- Reviews tab (only when approved_count >= minimum_reviews_to_display) -->
-                    <q-tab-panel v-if="showReviewsTab" name="reviews">
-                      <div class="q-pa-sm">
+                    <q-tab-panel
+                      v-if="showReviewsTab"
+                      name="reviews"
+                      class="reviews-tab-panel"
+                    >
+                      <div class="q-pa-sm reviews-tab-content">
                         <template v-if="showReviewsTab && reviews.length > 0">
                           <div class="row reviews-row q-mt-md">
                             <div
@@ -385,52 +406,55 @@
                               class="col-12 col-md-6 review-card-col"
                             >
                               <q-card bordered class="q-pa-md review-card">
-                              <q-item class="q-pa-none">
-                                <q-item-section>
-                                  <q-item-label class="text-bold">{{
-                                    review.client_name
-                                  }}</q-item-label>
-                                  <q-item-label
-                                    v-if="review.client_title"
-                                    caption
-                                    class="q-mb-sm"
-                                  >
-                                    {{ review.client_title }}
-                                  </q-item-label>
-                                  <div class="q-mb-sm">
-                                    <q-icon
-                                      v-for="n in 5"
-                                      :key="n"
-                                      :name="
-                                        n <= review.rating
-                                          ? 'star'
-                                          : 'star_border'
-                                      "
+                                <q-item class="q-pa-none">
+                                  <q-item-section class="review-card-content">
+                                    <q-item-label
+                                      class="text-bold review-name"
+                                      >{{ review.client_name }}</q-item-label
+                                    >
+                                    <q-item-label
+                                      v-if="review.client_title"
+                                      caption
+                                      class="q-mb-sm review-title"
+                                    >
+                                      {{ review.client_title }}
+                                    </q-item-label>
+                                    <div class="q-mb-sm">
+                                      <q-icon
+                                        v-for="n in 5"
+                                        :key="n"
+                                        :name="
+                                          n <= review.rating
+                                            ? 'star'
+                                            : 'star_border'
+                                        "
+                                        size="sm"
+                                        :color="
+                                          n <= review.rating ? 'amber' : 'grey'
+                                        "
+                                      />
+                                    </div>
+                                    <p
+                                      class="text-body2 q-my-none review-message"
+                                    >
+                                      {{ review.message }}
+                                    </p>
+                                    <q-btn
+                                      v-if="review.client_linkedin_url"
+                                      flat
+                                      dense
+                                      no-caps
+                                      color="primary"
+                                      icon="mdi-linkedin"
+                                      :href="review.client_linkedin_url"
+                                      target="_blank"
                                       size="sm"
-                                      :color="
-                                        n <= review.rating ? 'amber' : 'grey'
-                                      "
-                                    />
-                                  </div>
-                                  <p class="text-body2 q-my-none">
-                                    {{ review.message }}
-                                  </p>
-                                  <q-btn
-                                    v-if="review.client_linkedin_url"
-                                    flat
-                                    dense
-                                    no-caps
-                                    color="primary"
-                                    icon="mdi-linkedin"
-                                    :href="review.client_linkedin_url"
-                                    target="_blank"
-                                    size="sm"
-                                    class="q-mt-sm"
-                                  >
-                                    LinkedIn
-                                  </q-btn>
-                                </q-item-section>
-                              </q-item>
+                                      class="q-mt-sm"
+                                    >
+                                      LinkedIn
+                                    </q-btn>
+                                  </q-item-section>
+                                </q-item>
                               </q-card>
                             </div>
                           </div>
@@ -449,8 +473,7 @@
                           color="primary"
                           label="Submit a review"
                           icon="mdi-pencil"
-                          class="q-mt-xl"
-                          style="margin-left: -15px"
+                          class="q-mt-md submit-review-btn"
                           @click="showSubmitReviewDialog = true"
                         />
                       </div>
@@ -724,7 +747,7 @@
 
 <script setup>
 import { date, LocalStorage } from "quasar";
-import { reactive, computed, onMounted, ref } from "vue";
+import { reactive, computed, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import axios, { api } from "src/boot/axios";
 import { useQuasar } from "quasar";
 import { useSettingsStore } from "src/stores/settings/settingStore";
@@ -760,6 +783,22 @@ const showReviewsTab = computed(() => {
   return count >= min;
 });
 
+// Short tab labels for narrow screens (< 450px) so all tabs fit
+const narrowTabs = ref(false);
+const tabLabel = (name, fullLabel) => {
+  if (!narrowTabs.value) return fullLabel;
+  const short = {
+    about: "About",
+    website: "Web",
+    app: "App",
+    experiences: "Exp",
+    reviews: "Reviews",
+  };
+  return (
+    short[name] ?? (fullLabel.length > 6 ? fullLabel.slice(0, 6) : fullLabel)
+  );
+};
+
 const showSubmitReviewDialog = ref(false);
 const submittingReview = ref(false);
 const reviewForm = ref({
@@ -768,7 +807,7 @@ const reviewForm = ref({
   client_linkedin_url: "",
   client_title: "",
   message: "",
-  rating: 3,
+  rating: 5,
 });
 
 const ABOUT_EXCERPT_LENGTH = 800;
@@ -839,7 +878,7 @@ const onSubmitReview = async () => {
         client_linkedin_url: "",
         client_title: "",
         message: "",
-        rating: 3,
+        rating: 5,
       };
     } else {
       $q.notify({
@@ -887,7 +926,31 @@ const aboutExcerptMaxHeight = computed(() => {
   return `${em}em`;
 });
 
+const setNarrowTabs = () => {
+  narrowTabs.value = typeof window !== "undefined" && window.innerWidth < 450;
+};
+
+// Keep last scroll position so we can restore it when switching tabs on mobile (prevents jump to top)
+const lastScrollY = ref(0);
+const onScroll = () => {
+  lastScrollY.value = window.scrollY;
+};
+
+watch(tab, async () => {
+  if ($q.screen.gt.sm) return;
+  const y = lastScrollY.value;
+  await nextTick();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo(0, y);
+    });
+  });
+});
+
 onMounted(() => {
+  setNarrowTabs();
+  window.addEventListener("resize", setNarrowTabs);
+  window.addEventListener("scroll", onScroll, { passive: true });
   if ($q.screen.gt.sm) {
     tab.value = "website";
   } else {
@@ -896,15 +959,14 @@ onMounted(() => {
   settingStore.getSetting();
   userStore.getUserData();
   getAllData();
-  // getAllTech();
-  // getAllProject();
-  // getAllExperience();
   setTimeout(() => {
     settingStore.changeThemeColor();
   }, 100);
-  // if(LocalStorage.getItem('jwt')){
-  //   userStore.getUserData();
-  // }
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", setNarrowTabs);
+  window.removeEventListener("scroll", onScroll);
 });
 </script>
 
@@ -1051,5 +1113,235 @@ onMounted(() => {
 
 .review-card {
   margin-bottom: 16px;
+}
+
+/* Prevent overflow: allow flex children to shrink and text to wrap */
+.review-card-content,
+.review-name,
+.review-title,
+.review-message {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.review-message {
+  max-width: 100%;
+}
+
+/* Mobile: fix overflow on tabs and review section */
+@media (max-width: 599px) {
+  .home-page {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 12px !important;
+    padding-bottom: 24px !important;
+    overflow-x: hidden;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  .home-page * {
+    box-sizing: border-box;
+  }
+
+  .home-page .full-body-table {
+    border-left-width: 1px;
+    min-width: 0;
+  }
+
+  .home-page .row.items-stretch {
+    min-width: 0;
+  }
+
+  .home-content-col {
+    padding: 12px 8px !important;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .home-tabs-section {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 0;
+    max-width: 100%;
+    margin-bottom: 8px;
+  }
+
+  /* Tabs: scroll horizontally so "Reviews" is never cut off */
+  .home-tabs-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -8px;
+    margin-right: -8px;
+    padding: 4px 8px 8px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-tabs-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .home-tabs-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  .home-tabs {
+    width: max-content;
+    min-width: max-content;
+    flex-shrink: 0;
+  }
+
+  .home-tabs :deep(.q-tabs__content) {
+    flex-wrap: nowrap;
+  }
+
+  .home-tabs :deep(.q-tabs__inline) {
+    flex-wrap: nowrap;
+  }
+
+  .home-tabs :deep(.q-tab) {
+    flex-shrink: 0;
+    min-width: auto;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 0.8125rem;
+  }
+
+  .home-tab-panels {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .home-tab-panels :deep(.q-panel) {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .home-tab-panels :deep(.q-panel .q-pa-sm) {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .submit-review-btn {
+    margin-left: 0;
+    margin-top: 16px;
+  }
+
+  /* Reviews tab panel */
+  .reviews-tab-panel {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .reviews-tab-content {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .reviews-row {
+    margin-left: 0;
+    margin-right: 0;
+    min-width: 0;
+    max-width: 100%;
+    row-gap: 0;
+  }
+
+  .review-card-col {
+    padding: 10px 6px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .review-card {
+    margin-bottom: 20px;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .review-card-col:last-child .review-card {
+    margin-bottom: 0;
+  }
+
+  .review-card :deep(.q-item__section) {
+    min-width: 0;
+    overflow: hidden;
+  }
+}
+
+/* Extra narrow: below 450px - tabs and review cards sized to fit */
+@media (max-width: 450px) {
+  .home-page {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .home-content-col {
+    padding: 10px 6px !important;
+  }
+
+  .home-tabs-wrapper {
+    margin-left: -6px;
+    margin-right: -6px;
+    padding: 2px 6px 6px;
+  }
+
+  .home-tabs :deep(.q-tab) {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.75rem;
+    min-height: 36px;
+  }
+
+  .home-tabs :deep(.q-tab__label) {
+    font-size: 0.75rem;
+  }
+
+  .reviews-tab-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .reviews-row {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .review-card-col {
+    padding: 8px 4px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .review-card {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+    padding: 12px !important;
+  }
+
+  .review-card .review-name {
+    font-size: 0.9375rem;
+  }
+
+  .review-card .review-title {
+    font-size: 0.8125rem;
+  }
+
+  .review-card .review-message {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
 }
 </style>
