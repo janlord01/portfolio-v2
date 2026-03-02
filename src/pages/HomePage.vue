@@ -216,7 +216,7 @@
                           :class="
                             $q.screen.gt.md
                               ? 'row items-stretch justify-left'
-                              : 'column items-start'
+                              : 'tab-cards-wrap tab-cards-mobile'
                           "
                           class="q-mt-md"
                         >
@@ -273,7 +273,7 @@
                             )"
                             :key="post.id"
                             bordered
-                            class="q-my-sm q-mr-md"
+                            class="q-my-sm q-mr-md tab-detail-card"
                             :style="
                               $q.screen.gt.md
                                 ? 'flex-basis: 30%; '
@@ -287,6 +287,21 @@
                                 : previewProjectMobile(post)
                             "
                           >
+                            <div v-if="displayCardImages" class="tab-card-img-wrap">
+                              <img
+                                v-if="post.imageUrl || post.icon"
+                                :src="post.imageUrl || post.icon"
+                                class="tab-card-img"
+                                alt=""
+                              />
+                              <div
+                                v-else
+                                class="tab-card-img tab-card-img-placeholder"
+                              />
+                              <div class="tab-card-img-hover">
+                                <q-icon name="mdi-open-in-new" size="32px" />
+                              </div>
+                            </div>
                             <q-item>
                               <q-item-section>
                                 <q-item-label class="text-bold">{{
@@ -309,7 +324,7 @@
                           :class="
                             $q.screen.gt.md
                               ? 'row items-stretch justify-left'
-                              : 'column items-start'
+                              : 'tab-cards-wrap tab-cards-mobile'
                           "
                           class="q-mt-md"
                         >
@@ -362,7 +377,7 @@
                             :key="post.id"
                             bordered
                             rounded
-                            class="q-my-sm q-mr-md"
+                            class="q-my-sm q-mr-md tab-detail-card"
                             :style="
                               $q.screen.gt.md
                                 ? 'flex-basis: 30%'
@@ -376,6 +391,21 @@
                             "
                             style="cursor: pointer"
                           >
+                            <div v-if="displayCardImages" class="tab-card-img-wrap">
+                              <img
+                                v-if="post.imageUrl || post.icon"
+                                :src="post.imageUrl || post.icon"
+                                class="tab-card-img"
+                                alt=""
+                              />
+                              <div
+                                v-else
+                                class="tab-card-img tab-card-img-placeholder"
+                              />
+                              <div class="tab-card-img-hover">
+                                <q-icon name="mdi-open-in-new" size="32px" />
+                              </div>
+                            </div>
                             <q-item>
                               <q-item-section>
                                 <q-item-label class="text-bold">{{
@@ -398,6 +428,14 @@
                       class="reviews-tab-panel"
                     >
                       <div class="q-pa-sm reviews-tab-content">
+                        <q-btn
+                          outline
+                          color="primary"
+                          label="Submit a review"
+                          icon="mdi-pencil"
+                          class="q-mt-md submit-review-btn"
+                          @click="showSubmitReviewDialog = true"
+                        />
                         <template v-if="showReviewsTab && reviews.length > 0">
                           <div class="reviews-row q-mt-md">
                             <div
@@ -747,7 +785,15 @@
 
 <script setup>
 import { date, LocalStorage } from "quasar";
-import { reactive, computed, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
+import {
+  reactive,
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  nextTick,
+} from "vue";
 import axios, { api } from "src/boot/axios";
 import { useQuasar } from "quasar";
 import { useSettingsStore } from "src/stores/settings/settingStore";
@@ -782,6 +828,10 @@ const showReviewsTab = computed(() => {
   if (min === 0) return count >= 1;
   return count >= min;
 });
+
+const displayCardImages = computed(
+  () => settingStore.settingsData?.display_card_images !== false
+);
 
 // Short tab labels for narrow screens (< 450px) so all tabs fit
 const narrowTabs = ref(false);
@@ -1132,6 +1182,80 @@ onUnmounted(() => {
 
 .review-card .review-message {
   max-width: 100%;
+}
+
+/* Website / App / Experiences tab cards: same-size image; crop sides, no scroll */
+.tab-card-img-wrap {
+  height: 160px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden !important;
+  flex-shrink: 0;
+  min-width: 0;
+  position: relative;
+}
+
+.tab-card-img-wrap .tab-card-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.1);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.tab-card-img-wrap:hover .tab-card-img {
+  opacity: 0.95;
+}
+
+.tab-card-img-wrap .tab-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.82;
+}
+
+/* Hover overlay: icon link */
+.tab-card-img-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.tab-card-img-wrap:hover .tab-card-img-hover {
+  opacity: 1;
+}
+
+.tab-card-img-placeholder {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Card clips image so no scrollbar */
+.tab-detail-card {
+  overflow: hidden;
+}
+
+/* Mobile: tab cards = 1 column, multiple rows (one card per row) */
+.tab-cards-wrap.tab-cards-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.tab-cards-wrap.tab-cards-mobile .tab-detail-card,
+.tab-cards-wrap.tab-cards-mobile .q-card {
+  width: 100% !important;
+  max-width: 100%;
+  flex: 0 0 auto;
 }
 
 /* Mobile: fix overflow on tabs and review section */

@@ -20,6 +20,11 @@
             hint="0 = show Reviews tab when at least 1 approved; e.g. 3 = show when 3+ approved"
             class="q-mt-md"
           />
+          <q-toggle
+            v-model="displayCardImages"
+            label="Display images on project/experience cards"
+            class="q-mt-md"
+          />
           <label>Theme Color</label>
           <q-color
             v-model="themeColor"
@@ -50,9 +55,16 @@ const loading = ref(false);
 // New reactive variable for theme color
 const themeColor = ref(settingStore.settingsData.theme_color); // Default color as hex
 
+// Display card images (default true)
+const displayCardImages = ref(settingStore.settingsData.display_card_images !== false);
+
 // Watcher to ensure themeColor is always a hex string
 watch(themeColor, (newColor) => {
   settingStore.settingsData.theme_color = convertToHex(newColor);
+});
+
+watch(displayCardImages, (val) => {
+  settingStore.settingsData.display_card_images = val;
 });
 
 // Helper method to convert to hex
@@ -77,6 +89,7 @@ const submitForm = async () => {
   if (settingStore.settingsData.minimum_reviews_to_display !== undefined && settingStore.settingsData.minimum_reviews_to_display !== null) {
     formData.append('minimum_reviews_to_display', settingStore.settingsData.minimum_reviews_to_display);
   }
+  formData.append('display_card_images', settingStore.settingsData.display_card_images !== false ? '1' : '0');
 
   await api.post('/api/settings', formData)
     .then(response => {
@@ -115,8 +128,9 @@ const submitForm = async () => {
     });
 };
 
-onMounted(() => {
-  settingStore.getSetting();
+onMounted(async () => {
+  await settingStore.getSetting();
+  displayCardImages.value = settingStore.settingsData.display_card_images !== false;
 });
 </script>
 
