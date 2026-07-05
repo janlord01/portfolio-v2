@@ -1,1 +1,172 @@
 // app global css in SCSS form
+
+:root {
+  --portfolio-border: #000;
+}
+
+body.body--dark {
+  --portfolio-border: rgba(255, 255, 255, 0.6);
+}
+
+// ---------------------------------------------------------------------------
+// Shared layout (used by HomePage.vue and HeaderPart.vue)
+// ---------------------------------------------------------------------------
+
+.constrain {
+  max-width: 1340px;
+  margin: 0 auto;
+}
+
+// Window-style frame borders: outer frame supplies top/left, cells supply
+// right/bottom so adjacent cells share a single 1px line.
+.frame-top-left {
+  border-left: 1px solid var(--portfolio-border);
+  border-top: 1px solid var(--portfolio-border);
+}
+
+.frame-cell {
+  border-right: 1px solid var(--portfolio-border);
+  border-bottom: 1px solid var(--portfolio-border);
+}
+
+.frame-all {
+  border: 1px solid var(--portfolio-border);
+}
+
+.shared-border {
+  border-right: 1px solid var(--portfolio-border);
+  border-bottom: 1px solid var(--portfolio-border);
+  padding: 16px;
+  flex: 1;
+  width: 100%;
+}
+
+.shared-border-no-padding {
+  border-right: 1px solid var(--portfolio-border);
+  border-bottom: 1px solid var(--portfolio-border);
+  padding: 0;
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.shared-border-no-padding img {
+  position: absolute;
+  top: 0px;
+}
+
+.mobile-profile-img {
+  width: 100%;
+  text-align: center;
+}
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.img-responsive-github {
+  max-width: 100%;
+  height: auto;
+}
+
+// ---------------------------------------------------------------------------
+// Motion
+// ---------------------------------------------------------------------------
+
+// Route change fade (MainLayout router-view)
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
+// Project / experience cards: fade in on mount, lift on hover
+.tab-detail-card {
+  animation: card-fade-in 0.35s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab-detail-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-detail-card {
+    animation: none;
+    transition: none;
+  }
+
+  .page-fade-enter-active,
+  .page-fade-leave-active {
+    transition: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode
+// ---------------------------------------------------------------------------
+
+.dark-mode-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2000;
+}
+
+body.body--dark {
+  .text-black {
+    color: #fff !important;
+  }
+
+  // Elements styled for a white background lose contrast in dark mode
+  .text-dark {
+    color: #f5f5f5 !important;
+  }
+
+  .text-grey-9 {
+    color: #cfcfcf !important;
+  }
+
+  .app-loading {
+    background: var(--q-dark-page, #121212);
+  }
+
+  .tab-card-img-placeholder {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .about-excerpt-clamp::after {
+    background: linear-gradient(to bottom, transparent, var(--q-dark, #1d1d1d));
+  }
+
+  .home-tabs-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .tab-detail-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  // Third-party contributions chart is light-only; approximate a dark variant
+  .img-responsive-github {
+    filter: invert(0.88) hue-rotate(180deg);
+  }
+}

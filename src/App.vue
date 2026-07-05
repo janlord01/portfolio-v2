@@ -19,12 +19,19 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useQuasar, LocalStorage } from "quasar";
 
 defineOptions({
   name: "App",
 });
 
+const $q = useQuasar();
 const appReady = ref(false);
+
+const savedDark = LocalStorage.getItem("darkMode");
+if (savedDark !== null) {
+  $q.dark.set(savedDark);
+}
 
 onMounted(() => {
   requestAnimationFrame(() => {

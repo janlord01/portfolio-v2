@@ -4,17 +4,12 @@
     <template v-if="!isClosed">
       <template v-if="!isMinimized">
         <q-card class="no-shadow bg-transparent q-mt-xl">
+          <!-- q--avoid-card-border: QCard strips borders on direct div children -->
           <div
-            class="column full-body-table"
-            style="border-left: 1px solid #000; border-top: 1px solid #000"
+            class="column full-body-table frame-top-left q--avoid-card-border"
           >
             <!-- Row 1 with 1 col -->
-            <div
-              style="
-                border-right: 1px solid #000;
-                border-bottom: 1px solid #000;
-              "
-            >
+            <div class="frame-cell">
               <q-toolbar class="">
                 <q-toolbar-title> </q-toolbar-title>
                 <q-btn
@@ -23,6 +18,9 @@
                   dense
                   :icon="
                     isMinimized ? 'mdi-arrow-expand' : 'mdi-window-minimize'
+                  "
+                  :aria-label="
+                    isMinimized ? 'Restore window' : 'Minimize window'
                   "
                   size="sm"
                   @click="isMinimized = !isMinimized"
@@ -37,6 +35,11 @@
                       ? 'mdi-dock-window'
                       : 'mdi-window-maximize'
                   "
+                  :aria-label="
+                    $q.fullscreen.isActive
+                      ? 'Exit fullscreen'
+                      : 'Enter fullscreen'
+                  "
                   @click="$q.fullscreen.toggle()"
                   size="sm"
                 />
@@ -45,6 +48,7 @@
                   round
                   dense
                   icon="mdi-window-close"
+                  aria-label="Close window"
                   size="sm"
                   @click="isClosed = true"
                 />
@@ -54,13 +58,8 @@
             <!-- Row 2 with 2 cols -->
             <div class="row items-stretch">
               <div
-                class="col-4 preview"
+                class="col-4 preview frame-cell q-pa-md"
                 v-if="$q.screen.gt.sm"
-                style="
-                  border-right: 1px solid #000;
-                  border-bottom: 1px solid #000;
-                  padding: 16px;
-                "
               >
                 <div v-if="previewData">
                   <div class="text-h6 text-bold q-mb-sm">
@@ -156,14 +155,7 @@
                 </div>
               </div>
 
-              <div
-                class="col home-content-col"
-                style="
-                  border-right: 1px solid #000;
-                  border-bottom: 1px solid #000;
-                  padding: 16px;
-                "
-              >
+              <div class="col home-content-col frame-cell q-pa-md">
                 <!-- Row 2 - Column 2 -->
                 <div class="col col-sm-8 q-pt-md home-tabs-section">
                   <div class="home-tabs-wrapper">
@@ -292,7 +284,9 @@
                                 v-if="post.imageUrl || post.icon"
                                 :src="post.imageUrl || post.icon"
                                 class="tab-card-img"
-                                alt=""
+                                :alt="post.name"
+                                loading="lazy"
+                                decoding="async"
                               />
                               <div
                                 v-else
@@ -396,7 +390,9 @@
                                 v-if="post.imageUrl || post.icon"
                                 :src="post.imageUrl || post.icon"
                                 class="tab-card-img"
-                                alt=""
+                                :alt="post.name"
+                                loading="lazy"
+                                decoding="async"
                               />
                               <div
                                 v-else
@@ -499,11 +495,7 @@
                         </template>
                         <template v-else>
                           <p class="text-body2 text-grey-7 q-mt-md">
-                            {{
-                              showReviewsTab
-                                ? "No reviews yet."
-                                : 'Reviews will appear here once there are enough approved reviews. If you added reviews in the dashboard, set their status to "Approved" (or set Minimum reviews to display to 0 in Settings).'
-                            }}
+                            No reviews yet.
                           </p>
                         </template>
                         <q-btn
@@ -600,8 +592,7 @@
       <template v-else>
         <!-- Minimized look -->
         <div
-          class="q-pa-md row items-center justify-between q-mt-xl"
-          style="border: 1px solid #000"
+          class="q-pa-md row items-center justify-between q-mt-xl frame-all"
         >
           <div
             class="text-bold"
@@ -621,6 +612,7 @@
             dense
             size="sm"
             icon="mdi-arrow-expand"
+            aria-label="Restore window"
             @click="isMinimized = false"
             class="q-ml-sm"
           />
@@ -654,7 +646,15 @@
       <q-card class="my-card" style="min-width: 200px">
         <q-toolbar class="bg-grey-7 text-white">
           <q-toolbar-title> Preview </q-toolbar-title>
-          <q-btn flat round dense icon="close" size="sm" v-close-popup />
+          <q-btn
+            flat
+            round
+            dense
+            icon="close"
+            aria-label="Close preview"
+            size="sm"
+            v-close-popup
+          />
         </q-toolbar>
         <q-card-section class="q-pa-md">
           <div class="text-h6 text-bold q-mb-sm">{{ previewData.name }}</div>
@@ -685,6 +685,7 @@
               flat
               dense
               color="black"
+              aria-label="View source on GitHub"
               :href="previewData.github_url"
               target="_blank"
               class="q-mr-sm"
@@ -695,6 +696,7 @@
               flat
               dense
               color="primary"
+              aria-label="Visit live site"
               :href="previewData.url"
               target="_blank"
             />
@@ -784,9 +786,7 @@
 </template>
 
 <script setup>
-import { date, LocalStorage } from "quasar";
 import {
-  reactive,
   computed,
   onMounted,
   onUnmounted,
@@ -794,7 +794,7 @@ import {
   watch,
   nextTick,
 } from "vue";
-import axios, { api } from "src/boot/axios";
+import { api } from "src/boot/axios";
 import { useQuasar } from "quasar";
 import { useSettingsStore } from "src/stores/settings/settingStore";
 import { useUserStore } from "src/stores/user/userStore";
@@ -804,19 +804,15 @@ const settingStore = useSettingsStore();
 const userStore = useUserStore();
 const tab = ref("website");
 const $q = useQuasar();
-const newToken = ref(LocalStorage.getItem("jwt"));
 defineOptions({
   name: "PageHome",
 });
 const loading = ref(true);
 const posts = ref([]);
-const postApps = ref([]);
-const postWebs = ref([]);
 // Get unique types from fetched projects
 const projectTypes = ref([]);
 
 const experiences = ref([]);
-const techs = ref([]);
 
 const reviews = ref([]);
 const approvedReviewCount = ref(0);
@@ -850,6 +846,8 @@ const tabLabel = (name, fullLabel) => {
 };
 
 const showSubmitReviewDialog = ref(false);
+const slideUpTransition = "slide-up";
+const slideDownTransition = "slide-down";
 const submittingReview = ref(false);
 const reviewForm = ref({
   client_name: "",
@@ -864,23 +862,20 @@ const ABOUT_EXCERPT_LENGTH = 800;
 // Fetch data from APIs with loading simulation
 const getAllData = async () => {
   try {
-    const [projects, experiencesData, techsData, reviewsData] =
-      await Promise.all([
-        api.get("/api/v1/projects"),
-        api.get("/api/v1/experiences"),
-        api.get("/api/v1/tech-stacks"),
-        api.get("/api/v1/reviews").catch(() => ({
-          data: {
-            reviews: [],
-            approved_count: 0,
-            minimum_reviews_to_display: 0,
-          },
-        })),
-      ]);
+    const [projects, experiencesData, reviewsData] = await Promise.all([
+      api.get("/api/v1/projects"),
+      api.get("/api/v1/experiences"),
+      api.get("/api/v1/reviews").catch(() => ({
+        data: {
+          reviews: [],
+          approved_count: 0,
+          minimum_reviews_to_display: 0,
+        },
+      })),
+    ]);
 
     posts.value = projects.data.projects;
     experiences.value = experiencesData.data;
-    techs.value = techsData.data;
     reviews.value = reviewsData.data.reviews || [];
     approvedReviewCount.value = reviewsData.data.approved_count ?? 0;
     minimumReviewsToDisplay.value =
@@ -1006,12 +1001,8 @@ onMounted(() => {
   } else {
     tab.value = "about";
   }
-  settingStore.getSetting();
-  userStore.getUserData();
+  // Settings and user data are loaded once by MainLayout
   getAllData();
-  setTimeout(() => {
-    settingStore.changeThemeColor();
-  }, 100);
 });
 
 onUnmounted(() => {
@@ -1021,86 +1012,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="css">
-.constrain {
-  max-width: 1340px;
-  margin: 0 auto;
-}
-
-.text-name {
-  font-family: "Jersey 25", sans-serif;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.card {
-  flex: 0 1 calc(33.33% - 20px);
-  /* Adjust width and margin as needed */
-  margin-bottom: 20px;
-  /* Adjust margin as needed */
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 20px;
-  box-sizing: border-box;
-  /* Ensure padding is included in width calculation */
-}
-
-.shared-border {
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
-  padding: 16px;
-  flex: 1;
-
-  width: 100%;
-}
-
-.shared-border-no-padding {
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
-  padding: 0;
-  flex: 1;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-.contact-btn {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.shared-border-no-padding img {
-  position: absolute;
-  top: 0px;
-}
-
-/* .tech-stack {
-  filter: grayscale(1);
-} */
-
-.mobile-profile-img {
-  width: 100%;
-  text-align: center;
-}
-
-.img-responsive {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.minimized-card {
-  max-width: 300px;
-  margin: 0 auto;
-}
+/* Shared layout classes (.constrain, .frame-*, .shared-border*) live in src/css/app.scss */
 
 .restore-container {
   display: flex;
@@ -1116,6 +1028,13 @@ onUnmounted(() => {
   max-width: 100%;
 }
 
+/* Flex children must never exceed the window frame; without this the tabs'
+   max-content width propagates up and clips the toolbar on narrow screens */
+.full-body-table > div {
+  max-width: 100%;
+  min-width: 0;
+}
+
 .about-placeholder {
   line-height: 1.5;
 }
@@ -1124,11 +1043,7 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
 }
 
-.about-placeholder :deep(p) {
-  margin-bottom: 0.5rem;
-}
-
-.about-html :deep(p) {
+.about-html p {
   margin-bottom: 0.5rem;
 }
 
@@ -1325,15 +1240,11 @@ onUnmounted(() => {
     flex-shrink: 0;
   }
 
-  .home-tabs :deep(.q-tabs__content) {
+  .home-tabs .q-tabs__content {
     flex-wrap: nowrap;
   }
 
-  .home-tabs :deep(.q-tabs__inline) {
-    flex-wrap: nowrap;
-  }
-
-  .home-tabs :deep(.q-tab) {
+  .home-tabs .q-tab {
     flex-shrink: 0;
     min-width: auto;
     padding-left: 14px;
@@ -1346,12 +1257,12 @@ onUnmounted(() => {
     overflow: hidden;
   }
 
-  .home-tab-panels :deep(.q-panel) {
+  .home-tab-panels .q-panel {
     min-width: 0;
     overflow-x: hidden;
   }
 
-  .home-tab-panels :deep(.q-panel .q-pa-sm) {
+  .home-tab-panels .q-panel .q-pa-sm {
     padding-left: 4px;
     padding-right: 4px;
   }
@@ -1392,7 +1303,7 @@ onUnmounted(() => {
     overflow: hidden;
   }
 
-  .review-card :deep(.q-item__section) {
+  .review-card .q-item__section {
     min-width: 0;
     overflow: hidden;
   }
@@ -1417,14 +1328,14 @@ onUnmounted(() => {
     padding: 2px 6px 6px;
   }
 
-  .home-tabs :deep(.q-tab) {
+  .home-tabs .q-tab {
     padding-left: 10px;
     padding-right: 10px;
     font-size: 0.75rem;
     min-height: 36px;
   }
 
-  .home-tabs :deep(.q-tab__label) {
+  .home-tabs .q-tab__label {
     font-size: 0.75rem;
   }
 

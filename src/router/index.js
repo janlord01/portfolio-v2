@@ -17,10 +17,9 @@ Router.beforeEach(async (to, from, next) => {
     if (token) {
         api.get('/api/user')
         .then(response =>{
-          console.log(response)
           userStore.userData = response.data;
         }).catch(error =>{
-          console.log(error)
+          console.error(error)
         });
         next();
     } else {

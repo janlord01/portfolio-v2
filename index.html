@@ -1,15 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= productName %></title>
+    <title><%= productName %> | Software Engineer</title>
 
     <meta charset="utf-8" />
-    <meta name="description" content="<%= productDescription %>" />
+    <meta
+      name="description"
+      content="Portfolio of Janlord Luga, a software engineer based in Davao City, Philippines — projects, work experience, tech stack, and client reviews."
+    />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta
       name="viewport"
-      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
+      content="initial-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
+    />
+
+    <!-- Open Graph / link previews -->
+    <link rel="canonical" href="https://janlordluga.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://janlordluga.com/" />
+    <meta property="og:title" content="Janlord Luga | Software Engineer" />
+    <meta
+      property="og:description"
+      content="Portfolio of Janlord Luga, a software engineer based in Davao City, Philippines — projects, work experience, tech stack, and client reviews."
+    />
+    <meta
+      property="og:image"
+      content="https://janlordluga.com/images/janlord.png"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Janlord Luga | Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Janlord Luga, a software engineer based in Davao City, Philippines — projects, work experience, tech stack, and client reviews."
+    />
+    <meta
+      name="twitter:image"
+      content="https://janlordluga.com/images/janlord.png"
     />
 
     <link
@@ -40,6 +67,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://ghchart.rshah.org" />
     <link
       href="https://fonts.googleapis.com/css2?family=Jersey+25&display=swap"
       rel="stylesheet"
@@ -52,10 +80,13 @@
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta name="theme-color" content="#ffffff" />
 
-    <!-- Google tag (gtag.js) -->
+    <!--
+      Google Analytics 4 — replace G-XXXXXXXXXX with your GA4 Measurement ID
+      (the old UA-146413978-1 Universal Analytics property stopped collecting data in 2023).
+
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-146413978-1"
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -63,9 +94,9 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
-      gtag("config", "UA-146413978-1");
+      gtag("config", "G-XXXXXXXXXX");
     </script>
+    -->
   </head>
   <body>
     <!-- quasar:entry-point -->

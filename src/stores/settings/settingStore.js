@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import { Loading, LocalStorage, Notify, setCssVar } from 'quasar';
+import { Loading, Notify, setCssVar } from 'quasar';
 import { api } from 'src/boot/axios';
-import { useRouter } from 'vue-router';
 
 export const useSettingsStore = defineStore('settingsStore', {
   state: () => ({
@@ -14,15 +13,12 @@ export const useSettingsStore = defineStore('settingsStore', {
       }
     ],
     loading: true,
-    router: useRouter()
   }),
   getters: {
 
   },
   actions: {
     changeThemeColor(){
-      console.log(this.settingsData.theme_color)
-
       setCssVar('primary', this.settingsData.theme_color || '#DF542B')
     },
     async getSetting() {
@@ -30,12 +26,12 @@ export const useSettingsStore = defineStore('settingsStore', {
 
       await api.get('/api/settings')
       .then(response =>{
-        console.log(response);
         this.settingsData = response.data;
         this.loading = false
+        this.changeThemeColor()
 
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
         setTimeout(() =>{
           Notify.create({
             position: 'top',

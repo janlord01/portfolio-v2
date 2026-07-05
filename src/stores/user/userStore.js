@@ -14,13 +14,12 @@ export const useUserStore = defineStore("userStore", {
       await api
         .get("/api/users")
         .then((response) => {
-          console.log(response);
           if (response.data != "guest") {
             this.userData = response.data;
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
 
@@ -59,7 +58,7 @@ export const useUserStore = defineStore("userStore", {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           Notify.create({
             position: "top",
             type: "negative",
@@ -89,7 +88,7 @@ export const useUserStore = defineStore("userStore", {
           }, 2000);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
   },

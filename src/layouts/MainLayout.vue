@@ -1,76 +1,45 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="background: #fff" class="q-pt-lg">
+  <q-layout view="lHh Lpr lFf" class="q-pt-lg">
+    <q-btn
+      round
+      flat
+      dense
+      :icon="$q.dark.isActive ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+      :aria-label="$q.dark.isActive ? 'Switch to light mode' : 'Switch to dark mode'"
+      class="dark-mode-toggle"
+      @click="toggleDark"
+    />
     <q-page-container>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="page-fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { onMounted } from "vue";
+import { useQuasar, LocalStorage } from "quasar";
 import { useSettingsStore } from "src/stores/settings/settingStore";
+import { useUserStore } from "src/stores/user/userStore";
 
+const $q = useQuasar();
 const settingStore = useSettingsStore();
+const userStore = useUserStore();
 
 defineOptions({
   name: "MainLayout",
 });
 
-const linksList = [
-  {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
+const toggleDark = () => {
+  $q.dark.toggle();
+  LocalStorage.set("darkMode", $q.dark.isActive);
+};
 
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
 onMounted(() => {
-  setTimeout(() => {
-    settingStore.getSetting();
-    settingStore.changeThemeColor();
-  }, 500);
+  settingStore.getSetting();
+  userStore.getUserData();
 });
 </script>
